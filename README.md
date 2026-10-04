@@ -125,12 +125,16 @@ Open `frontend/index.html` using VS Code Live Server or a local web server.
 
 ## 📊 Example Output
 
-The application provides:
+### 🏠 Application Interface
 
-* **Match Score:** Percentage of job-required skills found in the resume
-* **Matched Skills:** Skills present in both the resume and job description
-* **Missing Skills:** Job requirements not detected in the resume
-* **Improvement Suggestions:** Recommendations for improving relevant skills
+![AI Resume & Job Matcher Homepage](frontend/homepage.png)
+
+### 📈 Resume Analysis Result
+
+![Resume Analysis Result](frontend/analysis-result.png)
+
+The application analyzes the uploaded resume against the provided job description and displays the match score, matched skills, missing skills, and personalized improvement suggestions.
+
 
 ## 🎯 Project Objective
 
