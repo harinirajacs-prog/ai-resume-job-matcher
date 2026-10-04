@@ -34,15 +34,34 @@ async function analyzeResume() {
 
         const data = await response.json();
 
+
         /* =========================
            SHOW RESULT
         ========================= */
 
         document.getElementById("result").classList.remove("hidden");
 
-        const scoreElement = document.getElementById("matchScore");
 
-        scoreElement.textContent = data.match_percentage + "%";
+        /* =========================
+           DETECTED JOB FIELD
+        ========================= */
+
+        const jobDomainElement =
+            document.getElementById("jobDomain");
+
+        jobDomainElement.textContent =
+            data.job_domain || "General";
+
+
+        /* =========================
+           MATCH SCORE
+        ========================= */
+
+        const scoreElement =
+            document.getElementById("matchScore");
+
+        scoreElement.textContent =
+            data.match_percentage + "%";
 
 
         /* =========================
@@ -160,7 +179,8 @@ async function analyzeResume() {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const resumeInput = document.getElementById("resume");
+    const resumeInput =
+        document.getElementById("resume");
 
     const uploadBox =
         document.querySelector(".upload-box");
@@ -189,9 +209,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             uploadIcon.textContent = "✅";
 
-            uploadTitle.textContent = "Resume uploaded!";
+            uploadTitle.textContent =
+                "Resume uploaded!";
 
-            uploadSubtitle.textContent = file.name;
+            uploadSubtitle.textContent =
+                file.name;
 
         }
 
@@ -204,7 +226,8 @@ document.addEventListener("DOMContentLoaded", function () {
    UPLOADED RESUME ANIMATION
 ===================================== */
 
-const uploadStyle = document.createElement("style");
+const uploadStyle =
+    document.createElement("style");
 
 uploadStyle.textContent = `
 

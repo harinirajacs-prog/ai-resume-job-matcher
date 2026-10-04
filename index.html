@@ -46,6 +46,7 @@
 
                     <div class="head">
                         <div class="hair"></div>
+
                         <div class="face">
                             <span class="eye left-eye"></span>
                             <span class="eye right-eye"></span>
@@ -63,12 +64,14 @@
                         </div>
 
                         <div class="arm right-arm">
+
                             <div class="resume-paper">
                                 <div></div>
                                 <div></div>
                                 <div></div>
                                 <div></div>
                             </div>
+
                         </div>
 
                     </div>
@@ -84,15 +87,22 @@
         <div class="card analyzer-card">
 
             <div class="section-heading">
+
                 <div class="heading-icon">📄</div>
+
                 <div>
                     <h2>Analyze Your Resume</h2>
-                    <p>Compare your resume with any job description.</p>
+
+                    <p>
+                        Compare your resume with any job description.
+                    </p>
                 </div>
+
             </div>
 
 
             <label for="resume">Upload Resume</label>
+
 
             <div class="upload-box">
 
@@ -102,12 +112,17 @@
 
                 <span>PDF files only</span>
 
-                <input type="file" id="resume" accept=".pdf">
+                <input
+                    type="file"
+                    id="resume"
+                    accept=".pdf"
+                >
 
             </div>
 
 
             <label for="jobDescription">Job Description</label>
+
 
             <textarea
                 id="jobDescription"
@@ -126,14 +141,50 @@
         <div id="result" class="result hidden">
 
             <div class="result-title">
+
                 <div>
-                    <span class="small-label">YOUR RESULTS</span>
-                    <h2>Resume Analysis</h2>
+
+                    <span class="small-label">
+                        YOUR RESULTS
+                    </span>
+
+                    <h2>
+                        Resume Analysis
+                    </h2>
+
                 </div>
 
-                <span class="result-icon">📊</span>
+                <span class="result-icon">
+                    📊
+                </span>
+
             </div>
 
+
+            <!-- DETECTED JOB FIELD -->
+
+            <div class="job-domain">
+
+                <div class="domain-icon">
+                    🎯
+                </div>
+
+                <div class="domain-content">
+
+                    <span class="domain-label">
+                        DETECTED JOB FIELD
+                    </span>
+
+                    <h3 id="jobDomain">
+                        General
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- MATCH SCORE -->
 
             <div class="score">
 
@@ -141,25 +192,38 @@
                     0%
                 </div>
 
-                <p>Overall Match Score</p>
+                <p>
+                    Overall Match Score
+                </p>
 
             </div>
 
 
+            <!-- SKILLS -->
+
             <div class="skills">
+
+
+                <!-- MATCHED -->
 
                 <div class="skill-card matched-card">
 
-                    <h3>✅ Matched Skills</h3>
+                    <h3>
+                        ✅ Matched Skills
+                    </h3>
 
                     <ul id="matchedSkills"></ul>
 
                 </div>
 
 
+                <!-- MISSING -->
+
                 <div class="skill-card missing-card">
 
-                    <h3>❌ Missing Skills</h3>
+                    <h3>
+                        ❌ Missing Skills
+                    </h3>
 
                     <ul id="missingSkills"></ul>
 
@@ -168,14 +232,28 @@
             </div>
 
 
+            <!-- SUGGESTIONS -->
+
             <div class="suggestions">
 
                 <div class="suggestion-heading">
-                    <span>💡</span>
+
+                    <span>
+                        💡
+                    </span>
+
                     <div>
-                        <h3>Improvement Suggestions</h3>
-                        <p>Skills you can focus on to improve your match.</p>
+
+                        <h3>
+                            Improvement Suggestions
+                        </h3>
+
+                        <p>
+                            Skills you can focus on to improve your match.
+                        </p>
+
                     </div>
+
                 </div>
 
                 <ul id="suggestionsList"></ul>
@@ -186,10 +264,15 @@
 
 
         <footer>
-            <p>Built with Python • FastAPI • HTML • CSS • JavaScript</p>
+
+            <p>
+                Built with Python • FastAPI • HTML • CSS • JavaScript
+            </p>
+
         </footer>
 
     </div>
+
 
     <script src="./script.js"></script>
 
