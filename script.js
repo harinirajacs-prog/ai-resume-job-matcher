@@ -1,181 +1,14 @@
-async function analyzeResume() {
+/* =========================================================
+   BACKEND
+========================================================= */
 
-    const resumeInput = document.getElementById("resume");
-    const jobDescription = document.getElementById("jobDescription").value;
+const BACKEND_URL =
+    "https://ai-resume-job-matcher-dtsa.onrender.com";
 
-    if (!resumeInput.files.length) {
-        alert("Please upload your resume PDF.");
-        return;
-    }
 
-    if (!jobDescription.trim()) {
-        alert("Please enter the job description.");
-        return;
-    }
-
-    const formData = new FormData();
-
-    formData.append("resume", resumeInput.files[0]);
-    formData.append("job_description", jobDescription);
-
-    try {
-
-        const response = await fetch(
-            "https://ai-resume-job-matcher-dtsa.onrender.com/analyze",
-            {
-                method: "POST",
-                body: formData
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error("Backend request failed");
-        }
-
-        const data = await response.json();
-
-
-        /* =========================
-           SHOW RESULT
-        ========================= */
-
-        document.getElementById("result").classList.remove("hidden");
-
-
-        /* =========================
-           DETECTED JOB FIELD
-        ========================= */
-
-        const jobDomainElement =
-            document.getElementById("jobDomain");
-
-        jobDomainElement.textContent =
-            data.job_domain || "General";
-
-
-        /* =========================
-           MATCH SCORE
-        ========================= */
-
-        const scoreElement =
-            document.getElementById("matchScore");
-
-        scoreElement.textContent =
-            data.match_percentage + "%";
-
-
-        /* =========================
-           SCORE COLOR
-        ========================= */
-
-        if (data.match_percentage >= 80) {
-
-            scoreElement.style.borderColor = "#22c55e";
-            scoreElement.style.color = "#16a34a";
-
-        } else if (data.match_percentage >= 50) {
-
-            scoreElement.style.borderColor = "#f59e0b";
-            scoreElement.style.color = "#d97706";
-
-        } else {
-
-            scoreElement.style.borderColor = "#ef4444";
-            scoreElement.style.color = "#dc2626";
-        }
-
-
-        /* =========================
-           RESULT LISTS
-        ========================= */
-
-        const matchedList =
-            document.getElementById("matchedSkills");
-
-        const missingList =
-            document.getElementById("missingSkills");
-
-        const suggestionsList =
-            document.getElementById("suggestionsList");
-
-
-        matchedList.innerHTML = "";
-        missingList.innerHTML = "";
-        suggestionsList.innerHTML = "";
-
-
-        /* =========================
-           MATCHED SKILLS
-        ========================= */
-
-        data.matched_skills.forEach(skill => {
-
-            const li = document.createElement("li");
-
-            li.textContent = skill;
-
-            matchedList.appendChild(li);
-
-        });
-
-
-        /* =========================
-           MISSING SKILLS
-        ========================= */
-
-        data.missing_skills.forEach(skill => {
-
-            const li = document.createElement("li");
-
-            li.textContent = skill;
-
-            missingList.appendChild(li);
-
-        });
-
-
-        /* =========================
-           SUGGESTIONS
-        ========================= */
-
-        data.suggestions.forEach(suggestion => {
-
-            const li = document.createElement("li");
-
-            li.textContent = suggestion;
-
-            suggestionsList.appendChild(li);
-
-        });
-
-
-        /* =========================
-           SCROLL TO RESULT
-        ========================= */
-
-        document.getElementById("result").scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Could not connect to the backend. " +
-            "Please try again."
-        );
-
-    }
-}
-
-
-/* =====================================
+/* =========================================================
    RESUME UPLOAD
-===================================== */
+========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -183,7 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("resume");
 
     const uploadBox =
-        document.querySelector(".upload-box");
+        document.getElementById("uploadBox");
+
+    if (!resumeInput || !uploadBox) {
+        console.error("Resume upload elements not found.");
+        return;
+    }
 
     const uploadIcon =
         uploadBox.querySelector(".upload-icon");
@@ -195,36 +33,521 @@ document.addEventListener("DOMContentLoaded", function () {
         uploadBox.querySelector("span");
 
 
-    /* =========================
-       WHEN PDF IS SELECTED
-    ========================= */
+    /* =====================================================
+       PDF SELECTED
+    ===================================================== */
 
     resumeInput.addEventListener("change", function () {
 
-        if (this.files && this.files.length > 0) {
+        const file = this.files[0];
 
-            const file = this.files[0];
+        if (!file) {
+            uploadBox.classList.remove("file-selected");
 
-            uploadBox.classList.add("file-selected");
-
-            uploadIcon.textContent = "✅";
+            uploadIcon.textContent = "📄";
 
             uploadTitle.textContent =
-                "Resume uploaded!";
+                "Choose your resume";
 
             uploadSubtitle.textContent =
-                file.name;
+                "PDF files only";
 
+            return;
         }
+
+
+        /* ================================================
+           CHECK PDF
+        ================================================= */
+
+        const isPDF =
+            file.type === "application/pdf" ||
+            file.name.toLowerCase().endsWith(".pdf");
+
+
+        if (!isPDF) {
+
+            alert("Please select a PDF file only.");
+
+            this.value = "";
+
+            uploadBox.classList.remove("file-selected");
+
+            uploadIcon.textContent = "📄";
+
+            uploadTitle.textContent =
+                "Choose your resume";
+
+            uploadSubtitle.textContent =
+                "PDF files only";
+
+            return;
+        }
+
+
+        /* ================================================
+           SHOW SELECTED PDF
+        ================================================= */
+
+        uploadBox.classList.add("file-selected");
+
+        uploadIcon.textContent = "✅";
+
+        uploadTitle.textContent =
+            "Resume uploaded!";
+
+        uploadSubtitle.textContent =
+            file.name;
+
+
+        console.log("PDF selected:", file.name);
+        console.log("PDF size:", file.size);
+        console.log("PDF type:", file.type);
 
     });
 
 });
 
 
-/* =====================================
-   UPLOADED RESUME ANIMATION
-===================================== */
+/* =========================================================
+   ANALYZE RESUME
+========================================================= */
+
+async function analyzeResume() {
+
+    const resumeInput =
+        document.getElementById("resume");
+
+    const jobDescriptionElement =
+        document.getElementById("jobDescription");
+
+    const analyzeButton =
+        document.getElementById("analyzeButton");
+
+
+    /* =====================================================
+       GET VALUES
+    ===================================================== */
+
+    const file =
+        resumeInput.files[0];
+
+    const jobDescription =
+        jobDescriptionElement.value.trim();
+
+
+    /* =====================================================
+       VALIDATE RESUME
+    ===================================================== */
+
+    if (!file) {
+
+        alert(
+            "Please upload your resume PDF."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       VALIDATE PDF
+    ===================================================== */
+
+    const isPDF =
+        file.type === "application/pdf" ||
+        file.name.toLowerCase().endsWith(".pdf");
+
+
+    if (!isPDF) {
+
+        alert(
+            "Please upload a valid PDF file."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       VALIDATE JOB DESCRIPTION
+    ===================================================== */
+
+    if (!jobDescription) {
+
+        alert(
+            "Please enter the job description."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       FORM DATA
+    ===================================================== */
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "resume",
+        file
+    );
+
+    formData.append(
+        "job_description",
+        jobDescription
+    );
+
+
+    /* =====================================================
+       BUTTON LOADING
+    ===================================================== */
+
+    if (analyzeButton) {
+
+        analyzeButton.disabled = true;
+
+        analyzeButton.textContent =
+            "⏳ Analyzing...";
+    }
+
+
+    try {
+
+        console.log(
+            "Sending resume:",
+            file.name
+        );
+
+
+        /* =================================================
+           SEND TO BACKEND
+        ================================================= */
+
+        const response =
+            await fetch(
+                BACKEND_URL + "/analyze",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        console.log(
+            "Backend status:",
+            response.status
+        );
+
+
+        /* =================================================
+           HANDLE BACKEND ERROR
+        ================================================= */
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Backend error:",
+                errorText
+            );
+
+            throw new Error(
+                "Backend error " +
+                response.status
+            );
+        }
+
+
+        /* =================================================
+           GET RESULT
+        ================================================= */
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Analysis result:",
+            data
+        );
+
+
+        /* =================================================
+           SHOW RESULT
+        ================================================= */
+
+        const result =
+            document.getElementById("result");
+
+        if (result) {
+
+            result.classList.remove(
+                "hidden"
+            );
+        }
+
+
+        /* =================================================
+           JOB DOMAIN
+        ================================================= */
+
+        const jobDomainElement =
+            document.getElementById("jobDomain");
+
+        if (jobDomainElement) {
+
+            jobDomainElement.textContent =
+                data.job_domain || "General";
+        }
+
+
+        /* =================================================
+           MATCH SCORE
+        ================================================= */
+
+        const scoreElement =
+            document.getElementById("matchScore");
+
+        if (scoreElement) {
+
+            scoreElement.textContent =
+                data.match_percentage + "%";
+
+
+            /* =============================================
+               SCORE COLOR
+            ============================================= */
+
+            if (
+                data.match_percentage >= 80
+            ) {
+
+                scoreElement.style.borderColor =
+                    "#22c55e";
+
+                scoreElement.style.color =
+                    "#16a34a";
+
+            } else if (
+                data.match_percentage >= 50
+            ) {
+
+                scoreElement.style.borderColor =
+                    "#f59e0b";
+
+                scoreElement.style.color =
+                    "#d97706";
+
+            } else {
+
+                scoreElement.style.borderColor =
+                    "#ef4444";
+
+                scoreElement.style.color =
+                    "#dc2626";
+            }
+        }
+
+
+        /* =================================================
+           MATCHED SKILLS
+        ================================================= */
+
+        const matchedList =
+            document.getElementById(
+                "matchedSkills"
+            );
+
+
+        /* =================================================
+           MISSING SKILLS
+        ================================================= */
+
+        const missingList =
+            document.getElementById(
+                "missingSkills"
+            );
+
+
+        /* =================================================
+           SUGGESTIONS
+        ================================================= */
+
+        const suggestionsList =
+            document.getElementById(
+                "suggestionsList"
+            );
+
+
+        /* =================================================
+           CLEAR OLD RESULTS
+        ================================================= */
+
+        if (matchedList) {
+            matchedList.innerHTML = "";
+        }
+
+        if (missingList) {
+            missingList.innerHTML = "";
+        }
+
+        if (suggestionsList) {
+            suggestionsList.innerHTML = "";
+        }
+
+
+        /* =================================================
+           DISPLAY MATCHED SKILLS
+        ================================================= */
+
+        if (
+            matchedList &&
+            Array.isArray(data.matched_skills)
+        ) {
+
+            data.matched_skills.forEach(
+                skill => {
+
+                    const li =
+                        document.createElement(
+                            "li"
+                        );
+
+                    li.textContent =
+                        skill;
+
+                    matchedList.appendChild(
+                        li
+                    );
+                }
+            );
+        }
+
+
+        /* =================================================
+           DISPLAY MISSING SKILLS
+        ================================================= */
+
+        if (
+            missingList &&
+            Array.isArray(data.missing_skills)
+        ) {
+
+            data.missing_skills.forEach(
+                skill => {
+
+                    const li =
+                        document.createElement(
+                            "li"
+                        );
+
+                    li.textContent =
+                        skill;
+
+                    missingList.appendChild(
+                        li
+                    );
+                }
+            );
+        }
+
+
+        /* =================================================
+           DISPLAY SUGGESTIONS
+        ================================================= */
+
+        if (
+            suggestionsList &&
+            Array.isArray(data.suggestions)
+        ) {
+
+            data.suggestions.forEach(
+                suggestion => {
+
+                    const li =
+                        document.createElement(
+                            "li"
+                        );
+
+                    li.textContent =
+                        suggestion;
+
+                    suggestionsList.appendChild(
+                        li
+                    );
+                }
+            );
+        }
+
+
+        /* =================================================
+           SCROLL TO RESULT
+        ================================================= */
+
+        if (result) {
+
+            result.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+
+
+        /* =================================================
+           SUCCESS
+        ================================================= */
+
+        console.log(
+            "Resume analysis completed successfully."
+        );
+
+    }
+
+
+    /* =====================================================
+       ERROR
+    ================================================= */
+
+    catch (error) {
+
+        console.error(
+            "Analysis error:",
+            error
+        );
+
+        alert(
+            "Could not analyze the resume.\n\n" +
+            error.message
+        );
+
+    }
+
+
+    /* =====================================================
+       RESET BUTTON
+    ================================================= */
+
+    finally {
+
+        if (analyzeButton) {
+
+            analyzeButton.disabled = false;
+
+            analyzeButton.textContent =
+                "✨ Analyze Resume";
+        }
+    }
+}
+
+
+/* =========================================================
+   UPLOAD ANIMATION
+========================================================= */
 
 const uploadStyle =
     document.createElement("style");
@@ -235,41 +558,47 @@ uploadStyle.textContent = `
 
     border-color: #8b5cf6 !important;
 
-    background: linear-gradient(
-        135deg,
-        #faf5ff,
-        #f0fdf4
-    ) !important;
+    background:
+        linear-gradient(
+            135deg,
+            #faf5ff,
+            #f0fdf4
+        ) !important;
 
     box-shadow:
         0 0 0 4px rgba(139, 92, 246, 0.08),
         0 12px 30px rgba(124, 58, 237, 0.15);
 
-    animation: uploadSuccess 0.5s ease;
-
+    animation:
+        uploadSuccess
+        0.5s
+        ease;
 }
 
 
-.upload-box.file-selected .upload-icon {
+.upload-box.file-selected
+.upload-icon {
 
-    animation: uploadBounce 0.6s ease;
-
+    animation:
+        uploadBounce
+        0.6s
+        ease;
 }
 
 
-.upload-box.file-selected strong {
+.upload-box.file-selected
+strong {
 
     color: #7c3aed !important;
-
 }
 
 
-.upload-box.file-selected span {
+.upload-box.file-selected
+span {
 
     color: #16a34a !important;
 
     font-weight: 600;
-
 }
 
 
@@ -308,4 +637,6 @@ uploadStyle.textContent = `
 
 `;
 
-document.head.appendChild(uploadStyle);
+document.head.appendChild(
+    uploadStyle
+);
