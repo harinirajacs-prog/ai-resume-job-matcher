@@ -9,54 +9,185 @@
 
 <body>
 
+    <div class="background-shape shape-one"></div>
+    <div class="background-shape shape-two"></div>
+
     <div class="container">
 
-        <header>
-            <h1>AI Resume & Job Matcher</h1>
-            <p>Analyze your resume and discover how well it matches a job.</p>
+        <!-- HERO SECTION -->
+        <header class="hero">
+
+            <div class="hero-text">
+
+                <div class="badge">
+                    ✨ AI-Powered Resume Analysis
+                </div>
+
+                <h1>
+                    Find Your Perfect
+                    <span>Job Match.</span>
+                </h1>
+
+                <p>
+                    Upload your resume, paste a job description,
+                    and discover how well your skills match the role.
+                </p>
+
+            </div>
+
+            <!-- CSS CHARACTER -->
+            <div class="character-area">
+
+                <div class="sparkle sparkle-one">✦</div>
+                <div class="sparkle sparkle-two">✦</div>
+                <div class="sparkle sparkle-three">✧</div>
+
+                <div class="character">
+
+                    <div class="head">
+                        <div class="hair"></div>
+                        <div class="face">
+                            <span class="eye left-eye"></span>
+                            <span class="eye right-eye"></span>
+                            <span class="smile"></span>
+                        </div>
+                    </div>
+
+                    <div class="body-character">
+
+                        <div class="arm left-arm"></div>
+
+                        <div class="shirt">
+                            <div class="collar left-collar"></div>
+                            <div class="collar right-collar"></div>
+                        </div>
+
+                        <div class="arm right-arm">
+                            <div class="resume-paper">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </header>
 
-        <div class="card">
 
-            <label>Upload Resume</label>
-            <input type="file" id="resume" accept=".pdf">
+        <!-- ANALYZER CARD -->
+        <div class="card analyzer-card">
 
-            <label>Job Description</label>
+            <div class="section-heading">
+                <div class="heading-icon">📄</div>
+                <div>
+                    <h2>Analyze Your Resume</h2>
+                    <p>Compare your resume with any job description.</p>
+                </div>
+            </div>
+
+
+            <label for="resume">Upload Resume</label>
+
+            <div class="upload-box">
+
+                <div class="upload-icon">📄</div>
+
+                <strong>Choose your resume</strong>
+
+                <span>PDF files only</span>
+
+                <input type="file" id="resume" accept=".pdf">
+
+            </div>
+
+
+            <label for="jobDescription">Job Description</label>
+
             <textarea
                 id="jobDescription"
                 placeholder="Paste the job description here..."
             ></textarea>
 
-            <button onclick="analyzeResume()">Analyze Resume</button>
+
+            <button onclick="analyzeResume()">
+                ✨ Analyze Resume
+            </button>
 
         </div>
 
+
+        <!-- RESULT -->
         <div id="result" class="result hidden">
 
-            <h2>Analysis Result</h2>
+            <div class="result-title">
+                <div>
+                    <span class="small-label">YOUR RESULTS</span>
+                    <h2>Resume Analysis</h2>
+                </div>
 
-            <div class="score">
-                <span id="matchScore">0%</span>
-                <p>Match Score</p>
+                <span class="result-icon">📊</span>
             </div>
 
-            <div class="skills">
-                <div>
-                    <h3>✅ Matched Skills</h3>
-                    <ul id="matchedSkills"></ul>
+
+            <div class="score">
+
+                <div id="matchScore">
+                    0%
                 </div>
 
-                <div>
-                    <h3>❌ Missing Skills</h3>
-                    <ul id="missingSkills"></ul>
+                <p>Overall Match Score</p>
+
+            </div>
+
+
+            <div class="skills">
+
+                <div class="skill-card matched-card">
+
+                    <h3>✅ Matched Skills</h3>
+
+                    <ul id="matchedSkills"></ul>
+
                 </div>
+
+
+                <div class="skill-card missing-card">
+
+                    <h3>❌ Missing Skills</h3>
+
+                    <ul id="missingSkills"></ul>
+
+                </div>
+
+            </div>
+
+
+            <div class="suggestions">
+
+                <div class="suggestion-heading">
+                    <span>💡</span>
+                    <div>
+                        <h3>Improvement Suggestions</h3>
+                        <p>Skills you can focus on to improve your match.</p>
+                    </div>
+                </div>
+
+                <ul id="suggestionsList"></ul>
+
             </div>
 
         </div>
-        <div class="suggestions">
-    <h3>💡 Improvement Suggestions</h3>
-    <ul id="suggestionsList"></ul>
-</div>
+
+
+        <footer>
+            <p>Built with Python • FastAPI • HTML • CSS • JavaScript</p>
+        </footer>
 
     </div>
 
