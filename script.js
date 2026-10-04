@@ -44,6 +44,7 @@ async function analyzeResume() {
 
         scoreElement.textContent = data.match_percentage + "%";
 
+
         /* =========================
            SCORE COLOR
         ========================= */
@@ -64,8 +65,9 @@ async function analyzeResume() {
             scoreElement.style.color = "#dc2626";
         }
 
+
         /* =========================
-           GET RESULT LISTS
+           RESULT LISTS
         ========================= */
 
         const matchedList =
@@ -77,9 +79,11 @@ async function analyzeResume() {
         const suggestionsList =
             document.getElementById("suggestionsList");
 
+
         matchedList.innerHTML = "";
         missingList.innerHTML = "";
         suggestionsList.innerHTML = "";
+
 
         /* =========================
            MATCHED SKILLS
@@ -92,7 +96,9 @@ async function analyzeResume() {
             li.textContent = skill;
 
             matchedList.appendChild(li);
+
         });
+
 
         /* =========================
            MISSING SKILLS
@@ -105,7 +111,9 @@ async function analyzeResume() {
             li.textContent = skill;
 
             missingList.appendChild(li);
+
         });
+
 
         /* =========================
            SUGGESTIONS
@@ -118,7 +126,9 @@ async function analyzeResume() {
             li.textContent = suggestion;
 
             suggestionsList.appendChild(li);
+
         });
+
 
         /* =========================
            SCROLL TO RESULT
@@ -129,7 +139,9 @@ async function analyzeResume() {
             block: "start"
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error);
 
@@ -137,36 +149,37 @@ async function analyzeResume() {
             "Could not connect to the backend. " +
             "Please try again."
         );
+
     }
 }
 
 
 /* =====================================
-   RESUME UPLOAD UI
+   RESUME UPLOAD
 ===================================== */
 
-const resumeInput = document.getElementById("resume");
+document.addEventListener("DOMContentLoaded", function () {
 
-if (resumeInput) {
+    const resumeInput = document.getElementById("resume");
+
+    const uploadBox =
+        document.querySelector(".upload-box");
+
+    const uploadIcon =
+        uploadBox.querySelector(".upload-icon");
+
+    const uploadTitle =
+        uploadBox.querySelector("strong");
+
+    const uploadSubtitle =
+        uploadBox.querySelector("span");
+
+
+    /* =========================
+       WHEN PDF IS SELECTED
+    ========================= */
 
     resumeInput.addEventListener("change", function () {
-
-        const uploadBox =
-            document.querySelector(".upload-box");
-
-        const uploadIcon =
-            uploadBox.querySelector(".upload-icon");
-
-        const title =
-            uploadBox.querySelector("strong");
-
-        const subtitle =
-            uploadBox.querySelector("span");
-
-
-        /* =========================
-           PDF SELECTED
-        ========================= */
 
         if (this.files && this.files.length > 0) {
 
@@ -176,29 +189,15 @@ if (resumeInput) {
 
             uploadIcon.textContent = "✅";
 
-            title.textContent = "Resume uploaded!";
+            uploadTitle.textContent = "Resume uploaded!";
 
-            subtitle.textContent = file.name;
+            uploadSubtitle.textContent = file.name;
 
-        }
-
-        /* =========================
-           NO FILE
-        ========================= */
-
-        else {
-
-            uploadBox.classList.remove("file-selected");
-
-            uploadIcon.textContent = "📄";
-
-            title.textContent = "Choose your resume";
-
-            subtitle.textContent = "PDF files only";
         }
 
     });
-}
+
+});
 
 
 /* =====================================
@@ -211,20 +210,20 @@ uploadStyle.textContent = `
 
 .upload-box.file-selected {
 
-    border-color: #8b5cf6;
+    border-color: #8b5cf6 !important;
 
-    background:
-        linear-gradient(
-            135deg,
-            #faf5ff,
-            #f0fdf4
-        );
+    background: linear-gradient(
+        135deg,
+        #faf5ff,
+        #f0fdf4
+    ) !important;
 
     box-shadow:
         0 0 0 4px rgba(139, 92, 246, 0.08),
         0 12px 30px rgba(124, 58, 237, 0.15);
 
     animation: uploadSuccess 0.5s ease;
+
 }
 
 
@@ -237,14 +236,14 @@ uploadStyle.textContent = `
 
 .upload-box.file-selected strong {
 
-    color: #7c3aed;
+    color: #7c3aed !important;
 
 }
 
 
 .upload-box.file-selected span {
 
-    color: #16a34a;
+    color: #16a34a !important;
 
     font-weight: 600;
 
