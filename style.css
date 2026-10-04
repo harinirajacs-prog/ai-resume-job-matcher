@@ -1329,3 +1329,130 @@ footer {
     }
 
 }
+/* =====================================
+   GALAXY BACKGROUND
+===================================== */
+
+body {
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(139, 92, 246, 0.22),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 15%,
+            rgba(59, 130, 246, 0.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 85%,
+            rgba(168, 85, 247, 0.16),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #f8f7ff 0%,
+            #eef2ff 45%,
+            #f5f3ff 100%
+        );
+
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+
+/* =====================================
+   GALAXY GLOW
+===================================== */
+
+body::before {
+    content: "";
+
+    position: fixed;
+
+    width: 500px;
+    height: 500px;
+
+    top: -180px;
+    left: -150px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(124, 58, 237, 0.18),
+            transparent 68%
+        );
+
+    filter: blur(20px);
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    animation: galaxyFloat 10s ease-in-out infinite;
+}
+
+
+body::after {
+    content: "";
+
+    position: fixed;
+
+    width: 450px;
+    height: 450px;
+
+    right: -150px;
+    bottom: -150px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(59, 130, 246, 0.15),
+            transparent 68%
+        );
+
+    filter: blur(25px);
+
+    pointer-events: none;
+
+    z-index: -1;
+
+    animation: galaxyFloatReverse 12s ease-in-out infinite;
+}
+
+
+/* =====================================
+   GALAXY ANIMATION
+===================================== */
+
+@keyframes galaxyFloat {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(60px, 40px) scale(1.08);
+    }
+
+}
+
+
+@keyframes galaxyFloatReverse {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(-50px, -30px) scale(1.1);
+    }
+
+}
