@@ -21,7 +21,7 @@ async function analyzeResume() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/analyze",
+            "https://ai-resume-job-matcher-dtsa.onrender.com/analyze",
             {
                 method: "POST",
                 body: formData
