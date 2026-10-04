@@ -1093,3 +1093,60 @@ footer {
         background-position: 0% 50%;
     }
 }
+/* =========================
+   UPLOADED RESUME STATE
+========================= */
+
+.upload-box.file-selected {
+    border-color: #8b5cf6;
+    background: linear-gradient(
+        135deg,
+        #faf5ff,
+        #f0fdf4
+    );
+    box-shadow:
+        0 0 0 4px rgba(139, 92, 246, 0.08),
+        0 12px 30px rgba(124, 58, 237, 0.12);
+    animation: uploadSuccess 0.5s ease;
+}
+
+.upload-box.file-selected .upload-icon {
+    animation: uploadBounce 0.6s ease;
+}
+
+.upload-box.file-selected strong {
+    color: #7c3aed;
+}
+
+.upload-box.file-selected span {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+@keyframes uploadSuccess {
+    0% {
+        transform: scale(0.98);
+    }
+
+    60% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes uploadBounce {
+    0% {
+        transform: scale(0.5);
+    }
+
+    60% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

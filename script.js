@@ -34,22 +34,23 @@ async function analyzeResume() {
 
         const scoreElement = document.getElementById("matchScore");
 
-scoreElement.textContent = data.match_percentage + "%";
+        scoreElement.textContent = data.match_percentage + "%";
 
-if (data.match_percentage >= 80) {
-    scoreElement.style.borderColor = "#22c55e";
-    scoreElement.style.color = "#16a34a";
-} else if (data.match_percentage >= 50) {
-    scoreElement.style.borderColor = "#f59e0b";
-    scoreElement.style.color = "#d97706";
-} else {
-    scoreElement.style.borderColor = "#ef4444";
-    scoreElement.style.color = "#dc2626";
-}
+        if (data.match_percentage >= 80) {
+            scoreElement.style.borderColor = "#22c55e";
+            scoreElement.style.color = "#16a34a";
+        } else if (data.match_percentage >= 50) {
+            scoreElement.style.borderColor = "#f59e0b";
+            scoreElement.style.color = "#d97706";
+        } else {
+            scoreElement.style.borderColor = "#ef4444";
+            scoreElement.style.color = "#dc2626";
+        }
 
         const matchedList = document.getElementById("matchedSkills");
         const missingList = document.getElementById("missingSkills");
         const suggestionsList = document.getElementById("suggestionsList");
+
         matchedList.innerHTML = "";
         missingList.innerHTML = "";
         suggestionsList.innerHTML = "";
@@ -65,6 +66,7 @@ if (data.match_percentage >= 80) {
             li.textContent = skill;
             missingList.appendChild(li);
         });
+
         data.suggestions.forEach(suggestion => {
             const li = document.createElement("li");
             li.textContent = suggestion;
@@ -80,4 +82,47 @@ if (data.match_percentage >= 80) {
             "Make sure FastAPI server is running."
         );
     }
+}
+
+
+/* =====================================
+   RESUME UPLOAD UI
+===================================== */
+
+const resumeInput = document.getElementById("resume");
+
+if (resumeInput) {
+
+    resumeInput.addEventListener("change", function () {
+
+        const uploadBox = document.querySelector(".upload-box");
+        const uploadIcon = uploadBox.querySelector(".upload-icon");
+        const title = uploadBox.querySelector("strong");
+        const subtitle = uploadBox.querySelector("span");
+
+        if (this.files.length > 0) {
+
+            const file = this.files[0];
+
+            uploadBox.classList.add("file-selected");
+
+            uploadIcon.textContent = "✅";
+
+            title.textContent = "Resume uploaded!";
+
+            subtitle.textContent = file.name;
+
+        } else {
+
+            uploadBox.classList.remove("file-selected");
+
+            uploadIcon.textContent = "📄";
+
+            title.textContent = "Choose your resume";
+
+            subtitle.textContent = "PDF files only";
+        }
+
+    });
+
 }
