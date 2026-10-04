@@ -17,7 +17,6 @@
     >
 </head>
 
-
 <body>
 
     <!-- BACKGROUND -->
@@ -55,7 +54,7 @@
 
 
             <!-- =========================================
-                 NEW MODERN MALE DEVELOPER
+                 MODERN MALE DEVELOPER
             ========================================== -->
 
             <div
@@ -63,22 +62,17 @@
                 id="characterArea"
             >
 
-                <!-- Floating particles -->
-
                 <span class="mascot-particle particle-1">✦</span>
                 <span class="mascot-particle particle-2">✧</span>
                 <span class="mascot-particle particle-3">✦</span>
                 <span class="mascot-particle particle-4">•</span>
 
 
-                <!-- Character -->
-
                 <div
                     class="new-developer"
                     id="developerCharacter"
                 >
 
-                    <!-- Glow behind character -->
                     <div class="mascot-glow"></div>
 
 
@@ -86,7 +80,6 @@
 
                     <div class="new-head">
 
-                        <!-- Hair -->
                         <div class="new-hair">
 
                             <span class="hair-lock lock-1"></span>
@@ -96,8 +89,6 @@
 
                         </div>
 
-
-                        <!-- Face -->
 
                         <div class="new-face">
 
@@ -128,7 +119,6 @@
 
                     <div class="new-body">
 
-                        <!-- Hoodie -->
                         <div class="hoodie">
 
                             <div class="hoodie-neck"></div>
@@ -143,16 +133,12 @@
                         </div>
 
 
-                        <!-- LEFT ARM -->
-
                         <div class="new-arm arm-left">
 
                             <div class="hand hand-left"></div>
 
                         </div>
 
-
-                        <!-- RIGHT ARM -->
 
                         <div class="new-arm arm-right">
 
@@ -190,7 +176,7 @@
                     </div>
 
 
-                    <!-- FLOATING CODE SYMBOLS -->
+                    <!-- FLOATING CODE -->
 
                     <span class="code-symbol symbol-1">{ }</span>
                     <span class="code-symbol symbol-2">&lt;/&gt;</span>
@@ -255,6 +241,7 @@
                 Upload Resume
             </label>
 
+
             <div
                 class="upload-box"
                 id="uploadBox"
@@ -272,10 +259,13 @@
                     PDF files only
                 </span>
 
+
+                <!-- PDF INPUT -->
+
                 <input
                     type="file"
                     id="resume"
-                    accept=".pdf"
+                    accept="application/pdf,.pdf"
                 >
 
             </div>
@@ -287,13 +277,14 @@
                 Job Description
             </label>
 
+
             <textarea
                 id="jobDescription"
                 placeholder="Paste the job description here..."
             ></textarea>
 
 
-            <!-- ANALYZE -->
+            <!-- ANALYZE BUTTON -->
 
             <button
                 id="analyzeButton"
@@ -408,6 +399,7 @@
                         </span>
 
                         <div>
+
                             <strong>
                                 Matched Skills
                             </strong>
@@ -415,6 +407,7 @@
                             <small>
                                 Skills found in your resume
                             </small>
+
                         </div>
 
                     </div>
@@ -439,6 +432,7 @@
                         </span>
 
                         <div>
+
                             <strong>
                                 Missing Skills
                             </strong>
@@ -446,6 +440,7 @@
                             <small>
                                 Skills to improve
                             </small>
+
                         </div>
 
                     </div>
@@ -496,7 +491,9 @@
         </div>
 
 
-        <!-- FOOTER -->
+        <!-- =========================================
+             FOOTER
+        ========================================== -->
 
         <footer>
 
@@ -519,6 +516,10 @@
 
     <script>
 
+        /* =========================================
+           BACKEND
+        ========================================== */
+
         const BACKEND_URL =
             "https://ai-resume-job-matcher-dtsa.onrender.com";
 
@@ -527,17 +528,29 @@
            MASCOT STATUS
         ========================================== */
 
-        function setMascotStatus(message, state = "") {
+        function setMascotStatus(
+            message,
+            state = ""
+        ) {
 
             const statusText =
-                document.getElementById("statusText");
+                document.getElementById(
+                    "statusText"
+                );
 
             const character =
-                document.getElementById("developerCharacter");
+                document.getElementById(
+                    "developerCharacter"
+                );
+
 
             if (statusText) {
-                statusText.textContent = message;
+
+                statusText.textContent =
+                    message;
+
             }
+
 
             if (character) {
 
@@ -549,17 +562,23 @@
                     "mascot-low"
                 );
 
+
                 if (state) {
+
                     character.classList.add(
                         state
                     );
+
                 }
+
             }
+
         }
 
 
         /* =========================================
            RESUME UPLOAD
+           PDF FILENAME DISPLAY FIX
         ========================================== */
 
         document
@@ -568,20 +587,130 @@
                 "change",
                 function () {
 
-                    if (this.files.length > 0) {
+                    /* Check if file exists */
 
-                        setMascotStatus(
-                            "Resume uploaded!",
-                            "mascot-uploaded"
-                        );
+                    if (
+                        !this.files ||
+                        this.files.length === 0
+                    ) {
 
-                        document
-                            .getElementById("uploadBox")
-                            .classList.add(
-                                "file-selected"
-                            );
+                        return;
 
                     }
+
+
+                    const file =
+                        this.files[0];
+
+
+                    /* Get upload elements */
+
+                    const uploadBox =
+                        document.getElementById(
+                            "uploadBox"
+                        );
+
+
+                    const uploadIcon =
+                        uploadBox.querySelector(
+                            ".upload-icon"
+                        );
+
+
+                    const uploadTitle =
+                        uploadBox.querySelector(
+                            "strong"
+                        );
+
+
+                    const uploadSubtitle =
+                        uploadBox.querySelector(
+                            "span"
+                        );
+
+
+                    /* =================================
+                       CHECK PDF
+                    ================================= */
+
+                    const isPDF =
+                        file.type === "application/pdf" ||
+                        file.name
+                            .toLowerCase()
+                            .endsWith(".pdf");
+
+
+                    if (!isPDF) {
+
+                        alert(
+                            "Please select a PDF file."
+                        );
+
+
+                        this.value = "";
+
+
+                        return;
+
+                    }
+
+
+                    /* =================================
+                       UPDATE UPLOAD BOX
+                    ================================= */
+
+                    uploadBox.classList.add(
+                        "file-selected"
+                    );
+
+
+                    uploadIcon.textContent =
+                        "✅";
+
+
+                    uploadTitle.textContent =
+                        "Resume uploaded!";
+
+
+                    /*
+                       THIS IS THE IMPORTANT LINE
+
+                       It displays the actual
+                       selected PDF filename.
+                    */
+
+                    uploadSubtitle.textContent =
+                        file.name;
+
+
+                    /* =================================
+                       UPDATE MASCOT
+                    ================================= */
+
+                    setMascotStatus(
+                        "Resume uploaded!",
+                        "mascot-uploaded"
+                    );
+
+
+                    /* =================================
+                       DEBUG
+                    ================================= */
+
+                    console.log(
+                        "PDF selected:",
+                        file.name
+                    );
+
+                    console.log(
+                        "File size:",
+                        file.size
+                    );
+
+                    console.log(
+                        "File type:",
+                        file.type
+                    );
 
                 }
             );
@@ -594,44 +723,73 @@
         async function analyzeResume() {
 
             const resumeInput =
-                document.getElementById("resume");
+                document.getElementById(
+                    "resume"
+                );
+
 
             const jobDescription =
-                document.getElementById("jobDescription");
+                document.getElementById(
+                    "jobDescription"
+                );
+
 
             const button =
-                document.getElementById("analyzeButton");
+                document.getElementById(
+                    "analyzeButton"
+                );
 
 
-            if (!resumeInput.files.length) {
+            /* =================================
+               CHECK RESUME
+            ================================= */
+
+            if (
+                !resumeInput.files ||
+                resumeInput.files.length === 0
+            ) {
 
                 alert(
                     "Please upload your resume PDF."
                 );
 
+
                 setMascotStatus(
                     "Please upload your resume!"
                 );
 
+
                 return;
+
             }
 
 
-            if (!jobDescription.value.trim()) {
+            /* =================================
+               CHECK JOB DESCRIPTION
+            ================================= */
+
+            if (
+                !jobDescription.value.trim()
+            ) {
 
                 alert(
                     "Please paste a job description."
                 );
 
+
                 setMascotStatus(
                     "Waiting for job description..."
                 );
 
+
                 return;
+
             }
 
 
-            /* ANALYZING STATE */
+            /* =================================
+               ANALYZING STATE
+            ================================= */
 
             setMascotStatus(
                 "Analyzing resume...",
@@ -641,9 +799,14 @@
 
             button.disabled = true;
 
+
             button.innerHTML =
                 "⏳ Analyzing...";
 
+
+            /* =================================
+               FORM DATA
+            ================================= */
 
             const formData =
                 new FormData();
@@ -661,11 +824,16 @@
             );
 
 
+            /* =================================
+               SEND TO BACKEND
+            ================================= */
+
             try {
 
                 const response =
                     await fetch(
-                        BACKEND_URL + "/analyze",
+                        BACKEND_URL +
+                        "/analyze",
                         {
                             method: "POST",
                             body: formData
@@ -686,12 +854,16 @@
                     await response.json();
 
 
+                /* Display result */
+
                 displayResults(data);
 
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    error
+                );
 
 
                 alert(
@@ -706,7 +878,9 @@
 
             } finally {
 
-                button.disabled = false;
+                button.disabled =
+                    false;
+
 
                 button.innerHTML =
                     "✨ Analyze Resume";
@@ -723,7 +897,9 @@
         function displayResults(data) {
 
             const result =
-                document.getElementById("result");
+                document.getElementById(
+                    "result"
+                );
 
 
             result.classList.remove(
@@ -731,24 +907,34 @@
             );
 
 
-            /* DOMAIN */
+            /* =================================
+               JOB DOMAIN
+            ================================= */
 
             document
-                .getElementById("jobDomain")
+                .getElementById(
+                    "jobDomain"
+                )
                 .textContent =
-                data.job_domain || "General";
+                data.job_domain ||
+                "General";
 
 
-            /* SCORE */
+            /* =================================
+               SCORE
+            ================================= */
 
             const score =
                 Number(
-                    data.match_percentage || 0
+                    data.match_percentage ||
+                    0
                 );
 
 
             document
-                .getElementById("score")
+                .getElementById(
+                    "score"
+                )
                 .textContent =
                 score + "%";
 
@@ -778,39 +964,55 @@
             );
 
 
+            /* =================================
+               SCORE MESSAGE
+            ================================= */
+
             if (score >= 80) {
 
                 scoreTitle.textContent =
                     "Excellent Match! 🎉";
 
+
                 scoreMessage.textContent =
                     "Your resume matches this job very well.";
+
 
                 setMascotStatus(
                     "Great match! 🎉",
                     "mascot-success"
                 );
 
-            } else if (score >= 50) {
+            }
+
+
+            else if (score >= 50) {
 
                 scoreTitle.textContent =
                     "Good Match! 👍";
 
+
                 scoreMessage.textContent =
                     "You have a good foundation. A few skills can be improved.";
+
 
                 setMascotStatus(
                     "Good match! Keep improving.",
                     "mascot-warning"
                 );
 
-            } else {
+            }
+
+
+            else {
 
                 scoreTitle.textContent =
                     "Skills Need Improvement";
 
+
                 scoreMessage.textContent =
                     "Focus on the missing skills to improve your match.";
+
 
                 setMascotStatus(
                     "Let's improve your skills!",
@@ -820,7 +1022,9 @@
             }
 
 
-            /* MATCHED SKILLS */
+            /* =================================
+               MATCHED SKILLS
+            ================================= */
 
             const matchedContainer =
                 document.getElementById(
@@ -828,7 +1032,8 @@
                 );
 
 
-            matchedContainer.innerHTML = "";
+            matchedContainer.innerHTML =
+                "";
 
 
             if (
@@ -844,14 +1049,17 @@
                                 "div"
                             );
 
+
                         skillBox.className =
                             "skill-box matched";
+
 
                         skillBox.innerHTML =
                             `
                             <span>✓</span>
                             ${skill}
                             `;
+
 
                         matchedContainer.appendChild(
                             skillBox
@@ -860,7 +1068,9 @@
                     }
                 );
 
-            } else {
+            }
+
+            else {
 
                 matchedContainer.innerHTML =
                     `
@@ -872,7 +1082,9 @@
             }
 
 
-            /* MISSING SKILLS */
+            /* =================================
+               MISSING SKILLS
+            ================================= */
 
             const missingContainer =
                 document.getElementById(
@@ -880,7 +1092,8 @@
                 );
 
 
-            missingContainer.innerHTML = "";
+            missingContainer.innerHTML =
+                "";
 
 
             if (
@@ -896,8 +1109,10 @@
                                 "div"
                             );
 
+
                         skillBox.className =
                             "skill-box missing";
+
 
                         skillBox.innerHTML =
                             `
@@ -925,7 +1140,9 @@
                     }
                 );
 
-            } else {
+            }
+
+            else {
 
                 missingContainer.innerHTML =
                     `
@@ -937,7 +1154,9 @@
             }
 
 
-            /* SUGGESTIONS */
+            /* =================================
+               SUGGESTIONS
+            ================================= */
 
             const suggestionsContainer =
                 document.getElementById(
@@ -962,14 +1181,17 @@
                                 "div"
                             );
 
+
                         suggestionBox.className =
                             "suggestion-item";
+
 
                         suggestionBox.innerHTML =
                             `
                             <span>→</span>
                             <p>${suggestion}</p>
                             `;
+
 
                         suggestionsContainer.appendChild(
                             suggestionBox
@@ -978,7 +1200,9 @@
                     }
                 );
 
-            } else {
+            }
+
+            else {
 
                 suggestionsContainer.innerHTML =
                     `
@@ -990,7 +1214,9 @@
             }
 
 
-            /* SCROLL */
+            /* =================================
+               SCROLL TO RESULT
+            ================================= */
 
             setTimeout(
                 function () {
