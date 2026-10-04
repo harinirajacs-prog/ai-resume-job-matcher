@@ -32,8 +32,20 @@ async function analyzeResume() {
 
         document.getElementById("result").classList.remove("hidden");
 
-        document.getElementById("matchScore").textContent =
-            data.match_percentage + "%";
+        const scoreElement = document.getElementById("matchScore");
+
+scoreElement.textContent = data.match_percentage + "%";
+
+if (data.match_percentage >= 80) {
+    scoreElement.style.borderColor = "#22c55e";
+    scoreElement.style.color = "#16a34a";
+} else if (data.match_percentage >= 50) {
+    scoreElement.style.borderColor = "#f59e0b";
+    scoreElement.style.color = "#d97706";
+} else {
+    scoreElement.style.borderColor = "#ef4444";
+    scoreElement.style.color = "#dc2626";
+}
 
         const matchedList = document.getElementById("matchedSkills");
         const missingList = document.getElementById("missingSkills");
